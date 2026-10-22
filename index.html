@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fossil Vault</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="importmap">
+    { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <canvas id="scene"></canvas>
+
+  <header class="hud-top">
+    <div class="brand">
+      <div class="logo">FOSSIL<span>VAULT</span></div>
+    </div>
+
+    <div class="stats glass">
+      <div class="level">
+        <div class="lvl-badge" id="lvl-num">1</div>
+        <div>
+          <div class="lvl-title" id="lvl-title">Volunteer</div>
+          <div class="bar"><div id="xp-bar"></div></div>
+        </div>
+      </div>
+      <div class="stat"><b id="score">0</b><span>XP</span></div>
+      <div class="stat"><b id="bones">0/13</b><span>Bones</span></div>
+      <div class="stat"><b id="integrity">100%</b><span>Health</span></div>
+    </div>
+
+    <div class="identity glass" id="identity">
+      <div class="tide-tag">TideCloak</div>
+      <button class="who" id="who-btn">
+        <span class="avatar" id="who-icon">🦴</span>
+        <span class="who-text"><b id="who-name">Dr. Linh Tran</b><small id="who-title">Field Paleontologist</small></span>
+        <span class="caret">▾</span>
+      </button>
+      <div class="menu hidden" id="who-menu"></div>
+    </div>
+  </header>
+
+  <div class="toolbar glass">
+    <button class="tool active" data-tool="brush" title="Brush (1)"><span>🖌️</span>Brush<kbd>1</kbd></button>
+    <button class="tool" data-tool="chisel" title="Chisel (2)"><span>⛏️</span>Chisel<kbd>2</kbd></button>
+    <div class="sep"></div>
+    <button class="icon-btn" id="mute" title="Sound">🔊</button>
+    <button class="icon-btn" id="view" title="Reset camera">🎥</button>
+  </div>
+
+  <aside class="panel glass">
+    <nav class="tabs">
+      <button class="tab active" data-tab="log">🦴 Bones</button>
+      <button class="tab" data-tab="vault">🔐 Vault <i id="vault-dot" class="dot hidden"></i></button>
+      <button class="tab" data-tab="badges">🏅</button>
+      <button class="tab" data-tab="audit">📜 Log</button>
+    </nav>
+    <section class="tab-body" id="tab-log"></section>
+    <section class="tab-body hidden" id="tab-vault"></section>
+    <section class="tab-body hidden" id="tab-badges"></section>
+    <section class="tab-body hidden" id="tab-audit"></section>
+  </aside>
+
+  <div id="tooltip" class="hidden"></div>
+  <div id="toasts"></div>
+
+  <div id="intro" class="overlay">
+    <div class="card intro-card">
+      <div class="logo big">FOSSIL<span>VAULT</span></div>
+      <p class="lead">Dig up the dinosaurs.<br />Unlock the secrets together.</p>
+      <p class="tag">🔐 No master key. Not even root.</p>
+      <div class="howto">
+        <div><kbd>Click</kbd> dig</div>
+        <div><kbd>1</kbd> brush</div>
+        <div><kbd>2</kbd> chisel</div>
+        <div><kbd>Drag</kbd> rotate</div>
+      </div>
+      <button class="cta" id="start">Start digging</button>
+    </div>
+  </div>
+
+  <div id="ork-modal" class="overlay hidden">
+    <div class="card ork-card">
+      <h2 id="ork-title"></h2>
+      <p id="ork-sub" class="muted"></p>
+      <div class="ork-ring" id="ork-ring"></div>
+      <div id="ork-result"></div>
+      <button class="cta ghost hidden" id="ork-close">Close</button>
+    </div>
+  </div>
+
+  <div id="loading">Digging…</div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
