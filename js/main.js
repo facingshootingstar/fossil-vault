@@ -661,7 +661,7 @@ async function runUnlock(actionId, { pid, proposal, override = false, forged = f
     onOrk: async (ork, r) => {
       const el = $(`#o-${ork.id}`);
       el.classList.add('busy');
-      await sleep(420);
+      await sleep(200);
       el.classList.remove('busy');
       el.classList.add(r.ok ? 'yes' : 'no');
       el.querySelector('.node').textContent = r.ok ? '✓' : '✗';
@@ -669,7 +669,7 @@ async function runUnlock(actionId, { pid, proposal, override = false, forged = f
       r.ok ? sfx.tick() : sfx.thud();
     },
   });
-  await sleep(350);
+  await sleep(250);
   const core = $('#ork-core');
   if (res.ok) {
     core.classList.add('open'); core.textContent = '🔓';

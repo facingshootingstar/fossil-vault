@@ -214,8 +214,9 @@ export class TideSim {
       if (onOrk) await onOrk(ork, r);
     }
     if (shares.length < THRESHOLD) {
+      const what = p.status === 'forged' ? 'Forgery' : override ? 'Override' : 'Unlock';
       p.status = override ? 'blocked' : p.status;
-      this.log(`${override ? 'Override' : 'Unlock'} refused · ${this.orks.length - shares.length}/${this.orks.length} ORKs said no`, 'deny');
+      this.log(`${what} refused · ${this.orks.length - shares.length}/${this.orks.length} ORKs said no`, 'deny');
       return { ok: false };
     }
     const raw = combine(shares.slice(0, THRESHOLD));
