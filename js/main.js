@@ -388,8 +388,11 @@ function renderVault() {
     h += `<div class="act ${v.opened ? 'opened' : ''}">
       <div class="act-head"><span class="lock">${v.opened ? '🔓' : '🔒'}</span><b>${a.icon} ${a.title}</b></div>
       <div class="signers">${chips(a.policy.all, signed)}${a.policy.atLeast ? `<span class="or">+ 1 of</span>${chips(a.policy.anyOf, signed)}` : ''}</div>`;
-    if (v.opened) {
+    if (v.opened && eligible(a.policy, me)) {
       h += payloadHTML(state.results[id]);
+    } else if (v.opened) {
+      h += `<div class="cipher">${sim.ciphertextPreview(id).slice(0, 28)}…</div>
+        <div class="sealed">🔒 Opened for the signers only</div>`;
     } else {
       h += `<div class="cipher">${sim.ciphertextPreview(id).slice(0, 28)}…</div>`;
       if (prop) {
@@ -674,7 +677,9 @@ async function runUnlock(actionId, { pid, proposal, override = false, forged = f
   if (res.ok) {
     core.classList.add('open'); core.textContent = '🔓';
     $('#ork-title').textContent = '🔓 Unlocked';
-    $('#ork-result').innerHTML = payloadHTML(res.payload);
+    $('#ork-result').innerHTML = eligible(a.policy, sim.current)
+      ? payloadHTML(res.payload)
+      : `<p class="big-line">Opened for the signers only.</p>`;
     state.results[actionId] = res.payload;
     sfx.unlock();
     addXP(200);

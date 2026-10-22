@@ -20,40 +20,45 @@ export const ROLES = {
   root:      { id: 'root',      name: 'root',           title: 'Sysadmin',         icon: '🛠️', color: '#ff6b6b' },
 };
 
+const rnd = (n) => crypto.getRandomValues(new Uint32Array(1))[0] % n;
+const digits = (w) => String(rnd(10 ** w)).padStart(w, '0');
+
 // Policies: `all` must all sign; plus at least `atLeast` of `anyOf`.
+// `make` invents each record at seal time, so no secret is ever written in this source.
+// Coordinates are deliberately fake: a random point at Null Island (0° N 0° E, open ocean).
 export const ACTIONS = {
   coords: {
     title: 'Site coordinates', icon: '📍',
     policy: { all: ['custodian'], anyOf: ['curator', 'heritage'], atLeast: 1 },
     needsBones: 0,
-    payload: {
+    make: () => ({
       kind: 'coords',
-      site: 'HC-07 "Ruth\'s Ridge"',
-      lat: '47.61834° N', lon: '106.92217° W',
-      note: 'Hell Creek Fm. · north gate',
-    },
+      site: `Site ${digits(2)} (fictional)`,
+      lat: `0.${digits(5)}° N`, lon: `0.${digits(5)}° E`,
+      note: 'Null Island · demo only',
+    }),
   },
   scan: {
     title: '3D scan', icon: '🔬',
     policy: { all: ['curator', 'heritage'], anyOf: [], atLeast: 0 },
     needsBones: 6,
-    payload: {
+    make: () => ({
       kind: 'scan',
-      dataset: 'FV-HC07 scan v1',
+      dataset: `FV-SCAN-${digits(4)}`,
       detail: '13 elements · 2.4 M triangles',
       licence: 'CC BY-NC · no location',
-    },
+    }),
   },
   transfer: {
     title: 'Transfer to museum', icon: '📜',
     policy: { all: ['custodian', 'curator', 'heritage'], anyOf: [], atLeast: 0 },
     needsBones: 13,
-    payload: {
+    make: () => ({
       kind: 'transfer',
-      deed: 'FV-2026-0001',
+      deed: `FV-2026-${digits(4)}`,
       to: 'Museum of Deep Time',
       royalty: '12% to landowner',
-    },
+    }),
   },
 };
 
@@ -145,7 +150,9 @@ export class TideSim {
       const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt']);
       const raw = new Uint8Array(await crypto.subtle.exportKey('raw', key));
       const iv = crypto.getRandomValues(new Uint8Array(12));
-      const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(JSON.stringify(a.payload)));
+      const plain = enc.encode(JSON.stringify(a.make())); // the record exists in clear only here
+      const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plain);
+      plain.fill(0);
       split(raw, this.orks.length, THRESHOLD).forEach((s, i) => { this.orks[i].shares[id] = s; });
       raw.fill(0); // the only full copy of the key is destroyed here
       this.vault[id] = { iv, ct: new Uint8Array(ct), opened: false };

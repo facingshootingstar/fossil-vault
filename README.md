@@ -54,4 +54,4 @@ Simplification: the demo recombines the key in the browser. Real Tide never reas
 - `js/main.js`: three.js scene, digging game, XP/badges, vault UI
 - `js/tidecloak-sim.js`: simulated TideCloak / ORK network
 
-All data is synthetic.
+All data is synthetic. Records are generated when the vault is sealed, so no secret is stored in the source. Coordinates are random points at Null Island (0° N, 0° E, open ocean). A decrypted record is shown only to the roles in its policy; root and the other roles see ciphertext.

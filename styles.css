@@ -120,6 +120,7 @@ h3 { font: 800 18px Cinzel, serif; letter-spacing: 0.06em; color: var(--amber-2)
 .act-head .lock { font-size: 22px; }
 .act-head b { flex: 1; font-size: 18px; }
 .cipher { font: 13px 'JetBrains Mono', monospace; color: #8a7a63; word-break: break-all; }
+.sealed { margin-top: 8px; font-size: 15px; font-weight: 700; color: var(--muted); }
 .signers { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 10px 0 8px; }
 .signer { display: flex; align-items: center; gap: 5px; font-size: 14px; padding: 4px 10px 4px 6px; border-radius: 20px; border: 1px dashed rgba(255, 255, 255, 0.25); color: var(--muted); }
 .signer.ok { border-style: solid; border-color: var(--ok); color: var(--ink); background: rgba(127, 220, 138, 0.12); }
